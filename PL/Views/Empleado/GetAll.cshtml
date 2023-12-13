@@ -1,0 +1,155 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> Rol
+@model ML.Empleado
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Empleados</h2>
+        </div>
+        <hr />
+    </div>
+
+    @if (Model.Empleados != null)
+    {
+        if (Rol.IsSignedIn(User))
+        {
+            if (User.IsInRole("Administrador"))
+            {
+                <a href="@Url.ActionLink("Form", "Empleado")" class="btn btn-success"><i class="bi bi-person-plus"></i>  Agregar</a>
+
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="col-md-12 table-responsive">
+                        <table class="table table-striped table-bordered" id="tblEmpleado">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Editar</th>
+                                    <th class="text-center">Numero de Empleado</th>
+                                    <th class="text-center">RFC</th>
+                                    <th class="text-center">Nombre Completo</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Telefono</th>
+                                    <th class="text-center">Fecha de Nacimiento</th>
+                                    <th class="text-center">NSS</th>
+                                    <th class="text-center">Fecha de Ingreso</th>
+                                    <th class="text-center">Foto</th>
+                                    <th class="text-center" hidden>IdEmpresa</th>
+                                    <th class="text-center">Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.Empleado empleado in Model.Empleados)
+                                {
+                                    <tr>
+                                        <td class="text-center"><a href="@Url.ActionLink("Form", "Empleado", new {NumeroEmpleado = empleado.NumeroEmpleado})" class="btn btn-warning"><i class="bi bi-pencil"></i></a></td>
+                                        <td class="text-center">@empleado.NumeroEmpleado</td>
+                                        <td class="text-center">@empleado.RFC</td>
+                                        <td class="text-center">@empleado.Nombre @empleado.ApellidoPaterno @empleado.ApellidoMaterno</td>
+                                        <td class="text-center">@empleado.Email</td>
+                                        <td class="text-center">@empleado.Telefono</td>
+                                        <td class="text-center">@empleado.FechaNacimiento</td>
+                                        <td class="text-center">@empleado.NSS</td>
+                                        <td class="text-center">@empleado.FechaIngreso</td>
+                                        <td class="text-center">
+                                            @if (empleado.Foto == null)
+                                            {
+                                                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg/v1/fill/w_300,h_300,q_75,strp/default_user_icon_4_by_karmaanddestiny_de7834s-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MzAwIiwicGF0aCI6IlwvZlwvMjcxZGVlYTgtZTI4Yy00MWEzLWFhZjUtMjkxM2Y1ZjQ4YmU2XC9kZTc4MzRzLTY1MTViZDQwLThiMmMtNGRjNi1hODQzLTVhYzFhOTVhOGI1NS5qcGciLCJ3aWR0aCI6Ijw9MzAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.W7L0Rf_YqFzX9yxDfKtIMFnnRFdjwCHxi7xeIISAHNM" width="50px" height="50px" />
+                                            }
+                                            else
+                                            {
+                                                <img src="data:image/png;base64, @Convert.ToBase64String(empleado.Foto)" width="50px" height="50px" />
+                                            }
+                                        </td>
+                                        <td class="text-center" hidden>@empleado.IdEmpresa</td>
+                                        <td class="text-center"><a href="@Url.ActionLink("Delete", "Empleado", new {NumeroEmpleado = empleado.NumeroEmpleado})" OnClick="return confirm('¿Estas seguro de eliminar al empleado?');" class="btn btn-danger"><i class="bi bi-trash"></i></a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            }else
+            {
+
+                <div class="row">
+                    <div class="col-md-12 table-responsive">
+                        <table class="table table-striped table-bordered" id="tblEmpleado">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Numero de Empleado</th>
+                                    <th class="text-center">RFC</th>
+                                    <th class="text-center">Nombre Completo</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Telefono</th>
+                                    <th class="text-center">Fecha de Nacimiento</th>
+                                    <th class="text-center">NSS</th>
+                                    <th class="text-center">Fecha de Ingreso</th>
+                                    <th class="text-center">Foto</th>
+                                    <th class="text-center" hidden>IdEmpresa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (ML.Empleado empleado in Model.Empleados)
+                                {
+                                    <tr>
+                                        <td class="text-center">@empleado.NumeroEmpleado</td>
+                                        <td class="text-center">@empleado.RFC</td>
+                                        <td class="text-center">@empleado.Nombre @empleado.ApellidoPaterno @empleado.ApellidoMaterno</td>
+                                        <td class="text-center">@empleado.Email</td>
+                                        <td class="text-center">@empleado.Telefono</td>
+                                        <td class="text-center">@empleado.FechaNacimiento</td>
+                                        <td class="text-center">@empleado.NSS</td>
+                                        <td class="text-center">@empleado.FechaIngreso</td>
+                                        <td class="text-center">
+                                            @if (empleado.Foto == null)
+                                            {
+                                                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg/v1/fill/w_300,h_300,q_75,strp/default_user_icon_4_by_karmaanddestiny_de7834s-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MzAwIiwicGF0aCI6IlwvZlwvMjcxZGVlYTgtZTI4Yy00MWEzLWFhZjUtMjkxM2Y1ZjQ4YmU2XC9kZTc4MzRzLTY1MTViZDQwLThiMmMtNGRjNi1hODQzLTVhYzFhOTVhOGI1NS5qcGciLCJ3aWR0aCI6Ijw9MzAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.W7L0Rf_YqFzX9yxDfKtIMFnnRFdjwCHxi7xeIISAHNM" width="50px" height="50px" />
+                                            }
+                                            else
+                                            {
+                                                <img src="data:image/png;base64, @Convert.ToBase64String(empleado.Foto)" width="50px" height="50px" />
+                                            }
+                                        </td>
+                                        <td class="text-center" hidden>@empleado.IdEmpresa</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            }
+        }
+
+    }else
+    {
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            No existen registros.
+        </div>
+    }
+
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tblEmpleado').DataTable();
+        });
+    </script>
+
+}

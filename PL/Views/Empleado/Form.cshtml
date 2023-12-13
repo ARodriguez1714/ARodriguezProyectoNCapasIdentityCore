@@ -1,0 +1,141 @@
+﻿@model ML.Empleado
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    h3 {
+        color: royalblue;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>@ViewBag.Titulo</h2>
+        </div>
+    </div>
+    <hr />
+
+    <form asp-controller="Empleado" asp-action="Form">
+        @if (Model.NumeroEmpleado != null)
+        {
+            <div class="row">
+                <div class="form-group col-md-3" @* hidden *@>
+                    <label>Numero de Empleado:</label>
+                    <input type="text" id="numeroEmpleado" name="numeroEmpleado" class="form-control" value="@Model.NumeroEmpleado" disabled />
+                </div>
+            </div>
+        }else
+        {
+            <div class="row">
+                <div class="form-group col-md-3" hidden>
+                    <label>Numero de Empleado:</label>
+                    <input type="text" id="numeroEmpleado" name="numeroEmpleado" class="form-control" value="@Model.NumeroEmpleado" @* disabled *@ />
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Datos Personales</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label>Nombre:</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" value="@Model.Nombre" />
+            </div>
+            <div class="form-group col-md-3">
+                <label>Apellido Paterno:</label>
+                <input type="text" id="apellidoPaterno" name="apellidoPaterno" class="form-control" value="@Model.ApellidoPaterno" />
+            </div>
+            <div class="form-group col-md-3">
+                <label>Apellido Materno:</label>
+                <input type="text" id="apellidoMaterno" name="apellidoMaterno" class="form-control" value="@Model.ApellidoMaterno" />
+            </div>
+            <div class="form-group col-md-3">
+                <label>Fecha de Nacimiento:</label>
+                <input type="text" id="fechaNacimiento" name="fechaNacimiento" class="form-control" value="@Model.FechaNacimiento" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Medios de Contacto</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label>Email:</label>
+                <input type="text" id="email" name="email" class="form-control" value="@Model.Email" />
+            </div>
+            <div class="form-group col-md-3">
+                <label>Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" class="form-control" value="@Model.Telefono" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Información Profesional</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label>RFC:</label>
+                <input type="text" id="rfc" name="rfc" class="form-control" value="@Model.RFC" />
+            </div>
+            <div class="form-group col-md-3">
+                <label>NSS:</label>
+                <input type="text" id="nss" name="nss" class="form-control" value="@Model.NSS" />
+            </div>
+            <div class="form-group col-md-3" hidden>
+                <label>Fecha de Ingreso:</label>
+                <input type="text" id="fechaIngreso" name="fechaIngreso" class="form-control" value="@Model.FechaIngreso" />
+            </div>
+            <div class="form-group col-md-3">
+                <label>Empresa:</label>
+                <input type="text" id="empresa" name="idEmpresa" class="form-control" value="@Model.IdEmpresa" />
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label>Foto:</label>
+                <input type="file" id="foto" name="foto" class="form-control" value="@Model.Foto" />
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="form-group col-md-2">
+                <input type="submit" class="btn btn-success" value="@ViewBag.Boton" />
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+        $(function () {
+            $("#fechaNacimiento").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+            });
+
+            $("#fechaIngreso").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true
+            });
+        });
+    </script>
+
+}

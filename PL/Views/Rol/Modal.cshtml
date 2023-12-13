@@ -1,0 +1,13 @@
+﻿@model ML.Rol
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewBag.Titulo</h1>
+
+
+<div class="alert alert-@ViewBag.Alert alert-dismissible" role="alert">
+    @ViewBag.Message
+</div>
+

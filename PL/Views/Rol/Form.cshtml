@@ -1,0 +1,49 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityRole
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    h3 {
+        color: royalblue;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Rol</h2>
+        </div>
+    </div>
+    <hr />
+
+    @using (Html.BeginForm("Form", "Rol", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Ingrese los datos del Rol</h3>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3" style="display: none;">
+                @Html.TextBoxFor(model => model.Id, new { @class="form-control" })
+            </div>
+
+            <div class="col-md-3">
+                @Html.Label("Nombre del Rol:")
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @id = "txtNombre", @placeholder = "ejem. Administrador" })
+                @Html.TextBoxFor(model => model.Id, new{@class = "visually-hidden"})
+                <label id="lblNombre"></label>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    <input type="submit" value="Guardar" class="btn btn-success" />
+                    @Html.ActionLink("Cancelar", "GetAll", "Rol", null, new { @class = "btn btn-danger" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
