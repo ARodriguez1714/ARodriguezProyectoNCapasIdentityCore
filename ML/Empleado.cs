@@ -19,7 +19,7 @@ namespace ML
         public string? NSS { get; set; }
         public string? FechaIngreso { get; set; }
         public byte[]? Foto { get; set; }
-        public int? IdEmpresa { get; set; }
+        public ML.Empresa? Empresa { get; set; }
         public List<object>? Empleados { get; set; }
         public object? Object { get; set; }
     }

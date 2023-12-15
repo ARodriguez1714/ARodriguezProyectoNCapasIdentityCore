@@ -27,7 +27,8 @@
                     <input type="text" id="numeroEmpleado" name="numeroEmpleado" class="form-control" value="@Model.NumeroEmpleado" disabled />
                 </div>
             </div>
-        }else
+        }
+        else
         {
             <div class="row">
                 <div class="form-group col-md-3" hidden>
@@ -44,19 +45,23 @@
         <div class="row">
             <div class="form-group col-md-3">
                 <label>Nombre:</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" value="@Model.Nombre" />
+                <input type="text" id="nombre" name="nombre" class="form-control" value="@Model.Nombre" onkeypress="return SoloLetras(event, 'lblNombre')" />
+                <label id="lblNombre"></label>
             </div>
             <div class="form-group col-md-3">
                 <label>Apellido Paterno:</label>
                 <input type="text" id="apellidoPaterno" name="apellidoPaterno" class="form-control" value="@Model.ApellidoPaterno" />
+                <label id="lblApellidoP"></label>
             </div>
             <div class="form-group col-md-3">
                 <label>Apellido Materno:</label>
                 <input type="text" id="apellidoMaterno" name="apellidoMaterno" class="form-control" value="@Model.ApellidoMaterno" />
+                <label id="lblApellidoM"></label>
             </div>
             <div class="form-group col-md-3">
                 <label>Fecha de Nacimiento:</label>
-                <input type="text" id="fechaNacimiento" name="fechaNacimiento" class="form-control" value="@Model.FechaNacimiento" />
+                <input type="text" id="fechaNacimiento" name="fechaNacimiento" class="form-control" value="@Model.FechaNacimiento" onkeypress="return Fecha(event, 'lblFechaNacimiento')" />
+                <label id="lblFechaNacimiento"></label>
             </div>
         </div>
         <br />
@@ -69,10 +74,12 @@
             <div class="form-group col-md-3">
                 <label>Email:</label>
                 <input type="text" id="email" name="email" class="form-control" value="@Model.Email" />
+                <label id="lblEmail"></label>
             </div>
             <div class="form-group col-md-3">
                 <label>Teléfono:</label>
                 <input type="text" id="telefono" name="telefono" class="form-control" value="@Model.Telefono" />
+                <label id="lblTelefono"></label>
             </div>
         </div>
         <br />
@@ -84,19 +91,29 @@
         <div class="row">
             <div class="form-group col-md-3">
                 <label>RFC:</label>
-                <input type="text" id="rfc" name="rfc" class="form-control" value="@Model.RFC" />
+                <input type="text" id="rfc" name="rfc" class="form-control" value="@Model.RFC" onkeypress="return SoloNumeros(event, 'lblRFC')" onblur="return BlurRfc(event, 'lblRFC')" />
+                <label id="lblRFC"></label>
             </div>
             <div class="form-group col-md-3">
                 <label>NSS:</label>
-                <input type="text" id="nss" name="nss" class="form-control" value="@Model.NSS" />
+                <input type="text" id="nss" name="nss" class="form-control" value="@Model.NSS" onkeypress="return SoloNumeros(event, 'lblNSS')" />
+                <label id="lblNSS"></label>
             </div>
             <div class="form-group col-md-3" hidden>
                 <label>Fecha de Ingreso:</label>
                 <input type="text" id="fechaIngreso" name="fechaIngreso" class="form-control" value="@Model.FechaIngreso" />
+                <label id="lblFechaIngreso"></label>
             </div>
             <div class="form-group col-md-3">
                 <label>Empresa:</label>
-                <input type="text" id="empresa" name="idEmpresa" class="form-control" value="@Model.IdEmpresa" />
+                <select name="Empresa.IdEmpresa" class="form-control">
+                    <option value="">Seleccione una opción</option>
+                    @foreach (ML.Empresa empresa in Model.Empresa.Empresas)
+                    {
+                        <option value="@empresa.IdEmpresa">@empresa.Nombre</option>
+                    }
+                </select>
+                @* <input type="text" id="empresa" name="idEmpresa" class="form-control" value="@Model.IdEmpresa" /> *@
             </div>
         </div>
         <br />
@@ -136,6 +153,48 @@
                 changeYear: true
             });
         });
+
+        function SoloLetras(event, controlId) {
+            var letra = event.key;
+            var regexOnlyLetters = /^[a-zA-Z\s]*$/g;
+
+            if (regexOnlyLetters.test(letra)) {
+                $('#' + controlId).text("");
+                return true;
+            } else {
+                $('#' + controlId).text("*Solo se aceptan letras.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function SoloNumeros(event, controlId) {
+            var numero = event.key;
+            var regexOnlyNumbers = /^\d+$/;
+
+            if (regexOnlyNumbers.test(numero)) {
+                $('#' + controlId).text("");
+                return true;
+            } else {
+                $('#' + controlId).text("*Solo se aceptan números.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function BlurRfc(event, controlId) {
+            var regexRFC = /^\d{13}$/;
+            var RfcWrite = event.target.value;
+
+            if (regexRFC.test(RfcWrite)) {
+                $('#' + controlId).text("");
+                return true;
+            } else {
+                $('#' + controlId).text("*Solo se aceptan 13 caracteres.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
     </script>
 
 }

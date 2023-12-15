@@ -3,94 +3,69 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PL.Controllers
 {
-    public class Empleado : Controller
+    public class Empresa : Controller
     {
         public IActionResult GetAll()
         {
-            ML.Empleado empleado = new ML.Empleado();
-            ML.Result result = BL.Empleado.GetAllLINQ();
+
+            ML.Empresa empresa = new ML.Empresa();
+            ML.Result result = BL.Empresa.GetAll();
 
             if (result.Correct)
             {
-
-                empleado.Empleados = result.Objects;
-
-                return View(empleado);
+                empresa.Empresas = result.Objects;
+                return View(empresa);
             }
             else
             {
-                return View(empleado);
+                return View(empresa);
             }
         }
 
+
         [Authorize(Roles = "Administrador")]
         [HttpGet]
-        public IActionResult Form(string numeroEmpleado)
+        public IActionResult Form(int? IdEmpresa)
         {
-            ML.Empleado empleado = new ML.Empleado();
-
-            empleado.Empresa = new ML.Empresa();
-
-            //GetAll Empresas
-
-            ML.Result resultEmpresa = BL.Empresa.GetAll();
-            empleado.Empresa.Empresas = resultEmpresa.Objects;
-
-            if (numeroEmpleado == null)
+            ML.Empresa empresa = new ML.Empresa();
+            if (IdEmpresa == null)
             {
                 //add
-                ViewBag.Titulo = "Agregar Usuario";
+                ViewBag.Titulo = "Agregar Empresa";
                 ViewBag.Boton = "Agregar";
-                return View(empleado);
-
+                return View(empresa);
             }
             else
             {
                 //update
-                ML.Result result = BL.Empleado.GetByIdLINQ(numeroEmpleado);
+                ML.Result result = BL.Empresa.GetById(IdEmpresa);
 
                 if (result.Correct)
                 {
-                    empleado = (ML.Empleado)result.Object;
-                    ViewBag.Titulo = "Modificar Usuario";
+                    empresa = (ML.Empresa)result.Object;
+                    ViewBag.Titulo = "Modificar Empresa";
                     ViewBag.Boton = "Modificar";
-                    return View(empleado);
+                    return View(empresa);
                 }
                 else
                 {
+                    ViewBag.Titulo = "Error";
                     ViewBag.Alert = "danger";
                     ViewBag.Message = result.Message;
                     return View("Modal");
                 }
-
             }
         }
 
-
         [Authorize(Roles = "Administrador")]
         [HttpPost]
-        public IActionResult Form(ML.Empleado empleado)
+        public IActionResult Form(ML.Empresa empresa)
         {
             ML.Result result = new ML.Result();
 
-            if (empleado.NumeroEmpleado == null)
+            if (empresa.IdEmpresa == null)
             {
-                result = BL.Empleado.AddLINQ(empleado);
-
-                if (result.Correct)
-                {
-                    return RedirectToAction("GetAll");
-                }
-                else
-                {
-                    ViewBag.Alert = "danger";
-                    ViewBag.Message = result.Message;
-                    return View("Modal");
-                }
-            }
-            else
-            {
-                result = BL.Empleado.Update(empleado);
+                result = BL.Empresa.Add(empresa);
 
                 if (result.Correct)
                 {
@@ -107,25 +82,24 @@ namespace PL.Controllers
                     return View("Modal");
                 }
             }
-        }
-
-        [Authorize(Roles = "Administrador")]
-        [HttpGet]
-        public IActionResult Delete(string NumeroEmpleado)
-        {
-            ML.Result result = BL.Empleado.DeleteLINQ(NumeroEmpleado);
-
-            if (result.Correct)
-            {
-                ViewBag.Alert = "success";
-                ViewBag.Message = result.Message;
-                return View("Modal");
-            }
             else
             {
-                ViewBag.Alert = "danger";
-                ViewBag.Message = result.Message;
-                return View("Modal");
+                result = BL.Empresa.Update(empresa);
+
+                if (result.Correct)
+                {
+                    ViewBag.Titulo = "Correcto";
+                    ViewBag.Alert = "success";
+                    ViewBag.Message = result.Message;
+                    return View("Modal");
+                }
+                else
+                {
+                    ViewBag.Titulo = "Error";
+                    ViewBag.Alert = "danger";
+                    ViewBag.Message = result.Message;
+                    return View("Modal");
+                }
             }
         }
     }

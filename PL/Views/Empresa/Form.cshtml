@@ -1,0 +1,57 @@
+﻿@model ML.Empresa
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>@ViewBag.Titulo</h1>
+            <p>Ingrese los datos de la empresa:</p>
+        </div>
+    </div>
+    <hr />
+
+    @using (Html.BeginForm("Form", "Empresa", FormMethod.Post, new { @class = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-md-6">
+                @Html.TextBoxFor(model => model.IdEmpresa, null, new { @style = "display: none;" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Nombre)
+                @Html.TextBoxFor(model => model.Nombre, null, new { @class = "form-control" })
+            </div>
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Telefono)
+                @Html.TextBoxFor(model => model.Telefono, null, new { @class = "form-control" })
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.Email)
+                @Html.TextBoxFor(model => model.Email, null, new { @class = "form-control" })
+            </div>
+            <div class="col-md-6">
+                @Html.LabelFor(model => model.DireccionWeb)
+                @Html.TextBoxFor(model => model.DireccionWeb, null, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-1">
+                <input type="submit" class="btn btn-success" value="@ViewBag.Boton" />
+            </div>
+            <div class="col-md-1">
+                @Html.ActionLink("Cancelar", "GetAll", "Empresa", null, new { @class = "btn btn-danger" })
+            </div>
+        </div>
+    }
+</div>
+

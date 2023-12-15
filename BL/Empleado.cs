@@ -51,7 +51,8 @@ namespace BL
                             empleado.NSS = item.NSS;
                             empleado.FechaIngreso = item.FechaIngreso;
                             empleado.Foto = item.Foto;
-                            empleado.IdEmpresa = item.IdEmpresa;
+                            empleado.Empresa = new ML.Empresa();
+                            empleado.Empresa.IdEmpresa = item.IdEmpresa;
                             result.Objects.Add(empleado);
                         }
                         result.Correct = true;
@@ -68,7 +69,6 @@ namespace BL
 
             return result;
         }
-
         public static ML.Result AddLINQ(ML.Empleado empleado)
         {
             ML.Result result = new ML.Result();
@@ -97,7 +97,7 @@ namespace BL
                     empleadoLINQ.Nss = empleado.NSS;
                     empleadoLINQ.FechaIngreso = DateTime.Parse(queryFechaIngreso);
                     empleadoLINQ.Foto = empleado.Foto;
-                    empleadoLINQ.IdEmpresa = empleado.IdEmpresa;
+                    empleadoLINQ.IdEmpresa = empleado.Empresa.IdEmpresa;
 
                     context.Empleados.Add(empleadoLINQ);
 
@@ -176,7 +176,7 @@ namespace BL
                         query.Nss = empleado.NSS;
                         query.FechaIngreso = DateTime.Parse(empleado.FechaIngreso);
                         query.Foto = empleado.Foto;
-                        query.IdEmpresa = empleado.IdEmpresa;
+                        query.IdEmpresa = empleado.Empresa.IdEmpresa;
 
                         context.SaveChanges();
 
@@ -237,7 +237,8 @@ namespace BL
                         empleado.NSS = item.NSS;
                         empleado.FechaIngreso = item.FechaIngreso;
                         empleado.Foto = item.Foto;
-                        empleado.IdEmpresa = item.IdEmpresa;
+                        empleado.Empresa = new ML.Empresa();
+                        empleado.Empresa.IdEmpresa = item.IdEmpresa;
 
                         result.Object = empleado;
 

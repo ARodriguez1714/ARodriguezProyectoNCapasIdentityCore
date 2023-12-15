@@ -27,7 +27,11 @@ public partial class ArodriguezProyectoNcapasIdentityCoreContext : DbContext
 
     public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
 
+    public virtual DbSet<Dependiente> Dependientes { get; set; }
+
     public virtual DbSet<Empleado> Empleados { get; set; }
+
+    public virtual DbSet<Empresa> Empresas { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
@@ -107,6 +111,45 @@ public partial class ArodriguezProyectoNcapasIdentityCoreContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
         });
 
+        modelBuilder.Entity<Dependiente>(entity =>
+        {
+            entity.HasKey(e => e.IdDependiente).HasName("PK__Dependie__366D0771D91A5987");
+
+            entity.ToTable("Dependiente");
+
+            entity.Property(e => e.ApellidoMaterno)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.ApellidoPaterno)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.EstadoCivil)
+                .HasMaxLength(30)
+                .IsUnicode(false);
+            entity.Property(e => e.FechaNacimiento).HasColumnType("date");
+            entity.Property(e => e.Genero)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .IsFixedLength();
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.NumeroEmpleado)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Rfc)
+                .HasMaxLength(25)
+                .IsUnicode(false)
+                .HasColumnName("RFC");
+            entity.Property(e => e.Telefono)
+                .HasMaxLength(10)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.NumeroEmpleadoNavigation).WithMany(p => p.Dependientes)
+                .HasForeignKey(d => d.NumeroEmpleado)
+                .HasConstraintName("FK__Dependien__Numer__3B75D760");
+        });
+
         modelBuilder.Entity<Empleado>(entity =>
         {
             entity.HasKey(e => e.NumeroEmpleado).HasName("PK__Empleado__44F848FCE62D7E11");
@@ -142,6 +185,30 @@ public partial class ArodriguezProyectoNcapasIdentityCoreContext : DbContext
                 .HasColumnName("RFC");
             entity.Property(e => e.Telefono)
                 .HasMaxLength(20)
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.IdEmpresaNavigation).WithMany(p => p.Empleados)
+                .HasForeignKey(d => d.IdEmpresa)
+                .HasConstraintName("FK_Empresa");
+        });
+
+        modelBuilder.Entity<Empresa>(entity =>
+        {
+            entity.HasKey(e => e.IdEmpresa).HasName("PK__Empresa__5EF4033E7948DDD4");
+
+            entity.ToTable("Empresa");
+
+            entity.Property(e => e.DireccionWeb)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Email)
+                .HasMaxLength(254)
+                .IsUnicode(false);
+            entity.Property(e => e.Nombre)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Telefono)
+                .HasMaxLength(50)
                 .IsUnicode(false);
         });
 

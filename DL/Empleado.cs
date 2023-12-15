@@ -28,4 +28,8 @@ public partial class Empleado
     public byte[]? Foto { get; set; }
 
     public int? IdEmpresa { get; set; }
+
+    public virtual ICollection<Dependiente> Dependientes { get; set; } = new List<Dependiente>();
+
+    public virtual Empresa? IdEmpresaNavigation { get; set; }
 }
