@@ -33,7 +33,7 @@
 
             <div class="col-md-3">
                 @Html.Label("Nombre del Rol:")
-                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @id = "txtNombre", @placeholder = "ejem. Administrador" })
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control", @id = "txtNombre", @placeholder = "ejem. Administrador", @onkeypress = "return SoloLetras(event, 'lblNombre')" })
                 @Html.TextBoxFor(model => model.Id, new{@class = "visually-hidden"})
                 <label id="lblNombre"></label>
             </div>
@@ -47,3 +47,4 @@
         </div>
     }
 </div>
+

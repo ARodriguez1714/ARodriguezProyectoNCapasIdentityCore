@@ -73,12 +73,12 @@
         <div class="row">
             <div class="form-group col-md-3">
                 <label>Email:</label>
-                <input type="text" id="email" name="email" class="form-control" value="@Model.Email" />
+                <input type="text" id="email" name="email" class="form-control" value="@Model.Email" onblur="return blurEmail(event, 'lblEmail')" />
                 <label id="lblEmail"></label>
             </div>
             <div class="form-group col-md-3">
                 <label>Teléfono:</label>
-                <input type="text" id="telefono" name="telefono" class="form-control" value="@Model.Telefono" />
+                <input type="text" id="telefono" name="telefono" class="form-control" value="@Model.Telefono" onkeypress="return SoloNumeros(event, 'lblTelefono')" onblur="return BlurTelefono(event, 'lblTelefono')" />
                 <label id="lblTelefono"></label>
             </div>
         </div>
@@ -96,7 +96,7 @@
             </div>
             <div class="form-group col-md-3">
                 <label>NSS:</label>
-                <input type="text" id="nss" name="nss" class="form-control" value="@Model.NSS" onkeypress="return SoloNumeros(event, 'lblNSS')" />
+                <input type="text" id="nss" name="nss" class="form-control" value="@Model.NSS" onkeypress="return SoloNumeros(event, 'lblNSS')" onblur="return BlurNSS(event, 'lblNSS')" />
                 <label id="lblNSS"></label>
             </div>
             <div class="form-group col-md-3" hidden>
@@ -120,7 +120,15 @@
         <div class="row">
             <div class="form-group col-md-3">
                 <label>Foto:</label>
-                <input type="file" id="foto" name="foto" class="form-control" value="@Model.Foto" />
+                <input type="file" id="fuImagen" name="fuImagen" class="form-control" value="@Model.Foto" onchange="PreviewImage(event)"/>
+                <br />
+                @if (Model.Foto == null)
+                {
+                    <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/271deea8-e28c-41a3-aaf5-2913f5f48be6/de7834s-6515bd40-8b2c-4dc6-a843-5ac1a95a8b55.jpg/v1/fill/w_300,h_300,q_75,strp/default_user_icon_4_by_karmaanddestiny_de7834s-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MzAwIiwicGF0aCI6IlwvZlwvMjcxZGVlYTgtZTI4Yy00MWEzLWFhZjUtMjkxM2Y1ZjQ4YmU2XC9kZTc4MzRzLTY1MTViZDQwLThiMmMtNGRjNi1hODQzLTVhYzFhOTVhOGI1NS5qcGciLCJ3aWR0aCI6Ijw9MzAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.W7L0Rf_YqFzX9yxDfKtIMFnnRFdjwCHxi7xeIISAHNM" id="imgEmpleado" width="150px" height="150px" />
+                }else
+                {
+                    <img src="data:image/png;base64, @Convert.ToBase64String(Model.Foto)" id="imgEmpleado" width="150px" height="150px" />
+                }
             </div>
         </div>
         <br />
@@ -135,11 +143,20 @@
 </div>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
+@* <link rel="stylesheet" href="/resources/demos/style.css"> *@
+
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script>
+        function PreviewImage(event) {
+            var output = document.getElementById('imgEmpleado');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+
         $(function () {
             $("#fechaNacimiento").datepicker({
                 dateFormat: "dd/mm/yy",
@@ -191,6 +208,49 @@
                 return true;
             } else {
                 $('#' + controlId).text("*Solo se aceptan 13 caracteres.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function BlurNSS(event, controlId) {
+            var regexRFC = /^\d{11}$/;
+            var RfcWrite = event.target.value;
+
+            if (regexRFC.test(RfcWrite)) {
+                $('#' + controlId).text("");
+                return true;
+            } else {
+                $('#' + controlId).text("*Solo se aceptan 11 caracteres.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function blurEmail(event, controlId){
+            var regexEmail = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            var emailWrite = event.target.value;
+
+            if(regexEmail.test(emailWrite)){
+                $('#' + controlId).text("El correo es correcto.");
+                $('#' + controlId).css({ "color": "green" });
+                return true;
+            }else{
+                $('#' + controlId).text("*El correo no tiene el formato correcto.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function BlurTelefono(event, controlId){
+            var regexTefelono = /^\d{10}$/;
+            var telefonoWrite = event.target.value;
+
+            if (regexTefelono.test(telefonoWrite)) {
+                $('#' + controlId).text("");
+                return true;
+            }else{
+                $('#' + controlId).text("*Solo se aceptan 10 digítos.");
                 $('#' + controlId).css({ "color": "red" });
                 return false;
             }

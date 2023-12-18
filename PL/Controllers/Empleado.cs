@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace PL.Controllers
 {
@@ -51,7 +52,9 @@ namespace PL.Controllers
 
                 if (result.Correct)
                 {
+
                     empleado = (ML.Empleado)result.Object;
+                    empleado.Empresa.Empresas = resultEmpresa.Objects;
                     ViewBag.Titulo = "Modificar Usuario";
                     ViewBag.Boton = "Modificar";
                     return View(empleado);
@@ -69,12 +72,13 @@ namespace PL.Controllers
 
         [Authorize(Roles = "Administrador")]
         [HttpPost]
-        public IActionResult Form(ML.Empleado empleado)
+        public IActionResult Form(ML.Empleado empleado, IFormFile fuImagen)
         {
             ML.Result result = new ML.Result();
 
             if (empleado.NumeroEmpleado == null)
             {
+                empleado.Foto = ConvertToBytes(fuImagen);
                 result = BL.Empleado.AddLINQ(empleado);
 
                 if (result.Correct)
@@ -126,6 +130,15 @@ namespace PL.Controllers
                 ViewBag.Alert = "danger";
                 ViewBag.Message = result.Message;
                 return View("Modal");
+            }
+        }
+
+        public byte[] ConvertToBytes(IFormFile fuImagen)
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                fuImagen.CopyTo(memoryStream);
+                return memoryStream.ToArray();
             }
         }
     }
