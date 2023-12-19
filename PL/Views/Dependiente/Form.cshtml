@@ -1,0 +1,226 @@
+﻿@model ML.Dependiente
+@{
+    ViewData["Title"] = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Rol</h2>
+        </div>
+    </div>
+    <hr />
+
+    @using (Html.BeginForm("Form", "Dependiente", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Ingrese los datos del Dependiente</h3>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-3" style="display: none;">
+                @Html.TextBoxFor(model => model.IdDependiente, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                @Html.Label("Nombre:")
+                @Html.TextBoxFor(model => model.Nombre, new { @class = "form-control", @id = "txtNombre", @placeholder = "ejem. José Antonio", @onkeypress = "return SoloLetras(event, 'lblNombre')" })
+                <label id="lblNombre"></label>
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Apellido Paterno:")
+                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @class = "form-control", @id = "txtApellidoPaterno", @placeholder = "ejem. Perez", @onkeypress = "return SoloLetras(event, 'lblApellidoPaterno')" })
+                <label id="lblApellidoPaterno"></label>
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Apellido Materno:")
+                @Html.TextBoxFor(model => model.ApellidoMaterno, new { @class = "form-control", @id = "txtApellidoMaterno", @placeholder = "ejem. Smith", @onkeypress = "return SoloLetras(event, 'lblApellidoMaterno')" })
+                <label id="lblApellidoMaterno"></label>
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Genero:")
+                <br />
+                @if (Model.Genero == "H ")
+                {
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary active">@Html.RadioButtonFor(model => model.Genero, "H", new { @id = "rbtnGeneroH", @checked = "checked" })Hombre</label>
+                        <label class="btn btn-primary">@Html.RadioButtonFor(model => model.Genero, "M", new { @id = "rbtnGeneroM" })Mujer</label>
+                    </div>
+                }
+                else if (Model.Genero == "M ")
+                {
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary">@Html.RadioButtonFor(model => model.Genero, "H", new { @id = "rbtnGeneroH" })Hombre</label>
+                        <label class="btn btn-primary active">@Html.RadioButtonFor(model => model.Genero, "M", new { @id = "rbtnGeneroM", @checked = "checked" })Mujer</label>
+                    </div>
+                }
+                else
+                {
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary">@Html.RadioButtonFor(model => model.Genero, "H", new { @id = "rbtnGeneroH" })Hombre</label>
+                        <label class="btn btn-primary">@Html.RadioButtonFor(model => model.Genero, "M", new { @id = "rbtnGeneroM" })Mujer</label>
+                    </div>
+                }
+                <label id="lblGenero"></label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                @Html.Label("Fecha de Nacimiento:")
+                @Html.TextBoxFor(model => model.FechaNacimiento, new { @class = "form-control", @id = "txtFechaNacimiento" })
+                <label id="lblFechaNacimiento"></label>
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Estado Civil:")
+                @Html.TextBoxFor(model => model.EstadoCivil, new { @class = "form-control", @id = "txtEstadoCivil" })
+                <label id="lblEstadoCivil"></label>
+            </div>
+            <div class="col-md-3">
+                @Html.Label("RFC:")
+                @Html.TextBoxFor(model => model.RFC, new { @class = "form-control", @id = "txtRFC", @onkeypress = "return SoloNumeros(event, 'lblRFC')" })
+                <label id="lblRFC"></label>
+            </div>
+            <div class="col-md-3">
+                @Html.Label("Teléfono:")
+                @Html.TextBoxFor(model => model.Telefono, new { @class = "form-control", @id = "txtTelefono", @onkeypress = "return SoloNumeros(event, 'lblTelefono')" })
+                <label id="lblTelefono"></label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                @Html.Label("Elige un Empleado:")
+                @Html.DropDownListFor(model => model.Empleado.NumeroEmpleado, new SelectList(Model.Empleado.Empleados,
+                         "NumeroEmpleado", "Nombre"), "Selecciona un empleado", new { @id = "ddlEmpleado", @class = "form-control" })
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <input type="submit" value="Guardar" class="btn btn-success" />
+                    @Html.ActionLink("Cancelar", "GetAll", "Rol", null, new { @class = "btn btn-danger" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+        function PreviewImage(event) {
+            var output = document.getElementById('imgEmpleado');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+
+        $(function () {
+            $("#txtFechaNacimiento").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true,
+            });
+
+        });
+
+        function SoloLetras(event, controlId) {
+            var letra = event.key;
+            var regexOnlyLetters = /^[a-zA-Z\s]*$/g;
+
+            if (regexOnlyLetters.test(letra)) {
+                $('#' + controlId).text("");
+                return true;
+            } else {
+                $('#' + controlId).text("*Solo se aceptan letras.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function SoloNumeros(event, controlId) {
+            var numero = event.key;
+            var regexOnlyNumbers = /^\d+$/;
+
+            if (regexOnlyNumbers.test(numero)) {
+                $('#' + controlId).text("");
+                return true;
+            } else {
+                $('#' + controlId).text("*Solo se aceptan números.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function BlurRfc(event, controlId) {
+            var regexRFC = /^\d{13}$/;
+            var RfcWrite = event.target.value;
+
+            if (regexRFC.test(RfcWrite)) {
+                $('#' + controlId).text("");
+                return true;
+            } else {
+                $('#' + controlId).text("*Solo se aceptan 13 caracteres.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function BlurNSS(event, controlId) {
+            var regexRFC = /^\d{11}$/;
+            var RfcWrite = event.target.value;
+
+            if (regexRFC.test(RfcWrite)) {
+                $('#' + controlId).text("");
+                return true;
+            } else {
+                $('#' + controlId).text("*Solo se aceptan 11 caracteres.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function blurEmail(event, controlId) {
+            var regexEmail = /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            var emailWrite = event.target.value;
+
+            if (regexEmail.test(emailWrite)) {
+                $('#' + controlId).text("El correo es correcto.");
+                $('#' + controlId).css({ "color": "green" });
+                return true;
+            } else {
+                $('#' + controlId).text("*El correo no tiene el formato correcto.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+
+        function BlurTelefono(event, controlId) {
+            var regexTefelono = /^\d{10}$/;
+            var telefonoWrite = event.target.value;
+
+            if (regexTefelono.test(telefonoWrite)) {
+                $('#' + controlId).text("");
+                return true;
+            } else {
+                $('#' + controlId).text("*Solo se aceptan 10 digítos.");
+                $('#' + controlId).css({ "color": "red" });
+                return false;
+            }
+        }
+    </script>
+
+}
+

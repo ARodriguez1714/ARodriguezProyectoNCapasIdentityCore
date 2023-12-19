@@ -41,6 +41,7 @@
                                     <th class="text-center">Fecha de Ingreso</th>
                                     <th class="text-center">Foto</th>
                                     <th class="text-center" hidden>IdEmpresa</th>
+                                    <th class="text-center">Agregar Dependiente</th>
                                     <th class="text-center">Eliminar</th>
                                 </tr>
                             </thead>
@@ -68,6 +69,7 @@
                                             }
                                         </td>
                                         <td class="text-center" hidden>@empleado.Empresa.IdEmpresa</td>
+                                        <td class="text-center"><a href="@Url.ActionLink("GetAll", "Dependiente", new {NumeroEmpleado = empleado.NumeroEmpleado})" class="btn btn-info"><i class="bi bi-people"></i></a></td>
                                         <td class="text-center"><a href="@Url.ActionLink("Delete", "Empleado", new {NumeroEmpleado = empleado.NumeroEmpleado})" OnClick="return confirm('¿Estas seguro de eliminar al empleado?');" class="btn btn-danger"><i class="bi bi-trash"></i></a></td>
                                     </tr>
                                 }

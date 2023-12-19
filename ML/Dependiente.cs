@@ -26,6 +26,8 @@ namespace ML
 
         public string? RFC { get; set; }
 
-        public virtual ML.Empleado? Empleado { get; set; }
+        public ML.Empleado? Empleado { get; set; }
+
+        public List<object> Dependientes { get; set; }
     }
 }

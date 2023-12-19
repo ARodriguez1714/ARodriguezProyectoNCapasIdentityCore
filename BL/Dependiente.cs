@@ -49,8 +49,8 @@ namespace BL
                             dependiente.RFC = item.RFC;
                             result.Objects.Add(dependiente);
                         }
-                        result.Correct = true;
                     }
+                    result.Correct = true;
                 }
             }
             catch (Exception ex)
@@ -224,6 +224,63 @@ namespace BL
 
                         result.Correct = true;
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Correct = false;
+                result.Ex = ex;
+                result.Message = "ERROR AL REALIZAR LA CONSULTA, " + result.Ex;
+                throw;
+            }
+
+            return result;
+        }
+
+        public static ML.Result GetByEmpleado(string numeroEmpleado)
+        {
+            ML.Result result = new ML.Result();
+
+            try
+            {
+                using (DL.ArodriguezProyectoNcapasIdentityCoreContext context = new DL.ArodriguezProyectoNcapasIdentityCoreContext())
+                {
+                    var query = (from dependiente in context.Dependientes
+                                 where dependiente.NumeroEmpleado == numeroEmpleado
+                                 select new
+                                 {
+                                     IdDependiente = dependiente.IdDependiente,
+                                     NumeroEmpleado = dependiente.NumeroEmpleado,
+                                     Nombre = dependiente.Nombre,
+                                     ApellidoPaterno = dependiente.ApellidoPaterno,
+                                     ApellidoMaterno = dependiente.ApellidoMaterno,
+                                     FechaNacimiento = dependiente.FechaNacimiento.GetValueOrDefault().ToString("dd/MM/yyyy"),
+                                     EstadoCivil = dependiente.EstadoCivil,
+                                     Genero = dependiente.Genero,
+                                     Telefono = dependiente.Telefono,
+                                     RFC = dependiente.Rfc
+                                 }).ToList();
+                    if (query.Count > 0)
+                    {
+                        result.Objects = new List<object>();
+                        foreach (var item in query)
+                        {
+                            ML.Dependiente dependiente = new ML.Dependiente();
+                            dependiente.IdDependiente = item.IdDependiente;
+                            dependiente.Empleado = new ML.Empleado();
+                            dependiente.Empleado.NumeroEmpleado = item.NumeroEmpleado;
+                            dependiente.Nombre = item.Nombre;
+                            dependiente.ApellidoPaterno = item.ApellidoPaterno;
+                            dependiente.ApellidoMaterno = item.ApellidoMaterno;
+                            dependiente.FechaNacimiento = item.FechaNacimiento;
+                            dependiente.EstadoCivil = item.EstadoCivil;
+                            dependiente.Genero = item.Genero;
+                            dependiente.Telefono = item.Telefono;
+                            dependiente.RFC = item.RFC;
+                            result.Objects.Add(dependiente);
+                        }
+                    }
+                    result.Correct = true;
                 }
             }
             catch (Exception ex)

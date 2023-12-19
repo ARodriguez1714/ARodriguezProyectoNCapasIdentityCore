@@ -1,0 +1,17 @@
+﻿@model ML.Empleado
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@ViewBag.Titulo</h1>
+
+
+<div class="alert alert-@ViewBag.Alert alert-dismissible" role="alert">
+    @ViewBag.Message
+</div>
+<br />
+
+<div>
+    <a href="@Url.ActionLink("GetAll", "Dependiente")" class="btn btn-danger"><i class="bi bi-backspace-fill"></i>  Regresar</a>
+</div>
